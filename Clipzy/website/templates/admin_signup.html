@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}Admin Signup{% endblock %}
+
+{% block extra_head %}
+<style>
+  .admin-wrap{ padding: 54px 0; }
+  .signup-card{
+    width: min(560px, 100%);
+    margin: 0 auto;
+    border-radius: calc(var(--radius) + 6px);
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+    box-shadow: var(--shadow);
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .signup-card::before{
+    content:"";
+    position:absolute;
+    inset:-120px -140px auto auto;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle at 30% 30%, rgba(109,94,252,.22), transparent 65%);
+    transform: rotate(18deg);
+    pointer-events:none;
+  }
+  .top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .top h1{
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+  .top p{
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.02);
+    color: var(--muted);
+    font-weight: 650;
+    font-size: 12px;
+    height: fit-content;
+    white-space: nowrap;
+  }
+  .dot{
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    box-shadow: 0 0 0 4px rgba(43,231,165,.14);
+  }
+
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap: 7px;
+    margin-bottom: 12px;
+  }
+  label{
+    color: rgba(167,179,204,.9);
+    font-size: 13px;
+    font-weight: 650;
+  }
+  input{
+    width: 100%;
+    padding: 12px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.02);
+    color: var(--text);
+    outline: none;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  input::placeholder{ color: rgba(167,179,204,.55); }
+  input:focus{
+    border-color: rgba(109,94,252,.65);
+    background: rgba(255,255,255,.03);
+  }
+
+  .actions{
+    display:flex;
+    gap: 10px;
+    align-items:center;
+    justify-content:flex-end;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+
+  .mini{
+    margin-top: 12px;
+    color: rgba(167,179,204,.75);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 560px){
+    .actions .btn{ width: 100%; }
+    .top{ flex-direction: column; align-items:flex-start; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="admin-wrap">
+  <div class="signup-card">
+    <div class="top">
+      <div>
+        <h1>Admin Signup</h1>
+        <p>
+          {% if admins_exist %}
+            Create a new admin account (admins only).
+          {% else %}
+            Create the first admin account for this website.
+          {% endif %}
+        </p>
+      </div>
+      <div class="pill"><span class="dot"></span> Admin</div>
+    </div>
+
+    <form method="POST" action="{{ url_for('auth.signup') }}">
+      <div class="field">
+        <label for="email">Admin Email</label>
+        <input id="email" name="email" type="email" placeholder="admin@youragency.com" required autocomplete="email">
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Minimum 8 characters" required autocomplete="new-password">
+      </div>
+
+      <div class="field">
+        <label for="confirm_password">Confirm Password</label>
+        <input id="confirm_password" name="confirm_password" type="password" placeholder="Re-enter password" required autocomplete="new-password">
+      </div>
+
+      <div class="actions">
+        {% if admins_exist %}
+          <a class="btn btn-ghost" href="{{ url_for('auth.audits') }}">Back</a>
+        {% else %}
+          <a class="btn btn-ghost" href="{{ url_for('views.home') }}">Back to site</a>
+        {% endif %}
+        <button class="btn btn-primary" type="submit">Create Admin</button>
+      </div>
+    </form>
+
+    <div class="mini">
+      {% if admins_exist %}
+        Only logged-in admins can add more admins.
+      {% else %}
+        After you create the first admin, you’ll be logged in automatically.
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

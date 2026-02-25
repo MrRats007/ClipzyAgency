@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found{% endblock %}
+
+{% block extra_head %}
+<style>
+  .error-wrap{
+    min-height: 70vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 60px 0;
+  }
+
+  .error-card{
+    width: min(720px, 100%);
+    text-align:center;
+    border-radius: calc(var(--radius) + 8px);
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+    box-shadow: var(--shadow);
+    padding: 40px 28px;
+    position: relative;
+    overflow:hidden;
+  }
+
+  .error-card::before{
+    content:"";
+    position:absolute;
+    inset:-120px -140px auto auto;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle at 30% 30%, rgba(109,94,252,.25), transparent 70%);
+    transform: rotate(25deg);
+    pointer-events:none;
+  }
+
+  .error-code{
+    font-size: 90px;
+    font-weight: 900;
+    letter-spacing: -3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+  }
+
+  .error-title{
+    font-size: 24px;
+    margin: 12px 0 6px;
+    letter-spacing: -0.02em;
+  }
+
+  .error-desc{
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 22px;
+  }
+
+  .error-actions{
+    display:flex;
+    justify-content:center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 600px){
+    .error-code{ font-size: 70px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="error-wrap">
+  <div class="error-card">
+    <h1 class="error-code">404</h1>
+    <h2 class="error-title">Oops. This page doesn’t exist.</h2>
+    <p class="error-desc">
+      The page you’re looking for might have been moved, deleted, 
+      or the URL was typed incorrectly.
+    </p>
+
+    <div class="error-actions">
+      <a class="btn btn-primary" href="{{ url_for('views.home') }}">
+        Go Back Home
+      </a>
+        </div>
+  </div>
+</section>
+{% endblock %}

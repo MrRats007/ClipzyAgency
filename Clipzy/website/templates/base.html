@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b0f14" />
+
+  <title>{% block title %}Agency{% endblock %}</title>
+
+  <!-- Basic SEO -->
+  <meta name="description" content="{% block meta_description %}Clipzy - The best way to share and manage your digital content.{% endblock %}" />
+
+  <!-- Font (fast + clean) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================
+       Dark Modern Base Styles
+       (kept compact + non-duplicate)
+       ========================= */
+    :root{
+      --bg: #0b0f14;
+      --bg-2:#0f1620;
+      --card:#0f1722;
+      --card-2:#111c2a;
+      --text:#eaf0ff;
+      --muted:#a7b3cc;
+      --border: rgba(255,255,255,.08);
+      --shadow: 0 12px 30px rgba(0,0,0,.45);
+      --radius: 18px;
+
+      /* Accent (change this one value to re-theme) */
+      --accent: #6d5efc;
+      --accent-2:#2be7a5;
+
+      --container: 1120px;
+      --pad: 20px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(900px 420px at 18% 10%, rgba(109,94,252,.20), transparent 60%),
+                  radial-gradient(720px 380px at 85% 18%, rgba(43,231,165,.12), transparent 55%),
+                  linear-gradient(180deg, #070a0e, var(--bg));
+      line-height:1.55;
+      overflow-x:hidden;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    img{ max-width:100%; height:auto; display:block; }
+
+    .container{
+      width: min(var(--container), calc(100% - (var(--pad) * 2)));
+      margin-inline:auto;
+    }
+
+    /* Focus */
+    :focus-visible{
+      outline: 2px solid rgba(109,94,252,.9);
+      outline-offset: 3px;
+      border-radius: 10px;
+    }
+
+    /* =========================
+       Buttons
+       ========================= */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      font-weight: 600;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.05);
+      border-color: rgba(255,255,255,.14);
+      box-shadow: 0 10px 24px rgba(0,0,0,.35);
+    }
+    .btn:active{ transform: translateY(0px); }
+
+    .btn-primary{
+      border: 1px solid rgba(109,94,252,.55);
+      background: linear-gradient(135deg, rgba(109,94,252,.95), rgba(43,231,165,.22));
+      box-shadow: 0 10px 26px rgba(109,94,252,.18);
+    }
+    .btn-primary:hover{
+      border-color: rgba(109,94,252,.85);
+      box-shadow: 0 14px 34px rgba(109,94,252,.24);
+    }
+
+    .btn-ghost{
+      background: rgba(255,255,255,.02);
+    }
+
+    /* =========================
+       Navbar
+       ========================= */
+    .nav-wrap{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(11,15,20,.72);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 14px 0;
+      gap: 14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 160px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .brand-mark{
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      background: radial-gradient(12px 12px at 30% 30%, rgba(255,255,255,.45), transparent 60%),
+                  linear-gradient(135deg, rgba(109,94,252,.95), rgba(43,231,165,.55));
+      box-shadow: 0 10px 22px rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.10);
+      flex: 0 0 auto;
+    }
+    .brand small{
+      display:block;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0;
+      margin-top: 2px;
+      font-size: 12px;
+    }
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap: 18px;
+      flex-wrap:wrap;
+    }
+    .nav-links a{
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 14px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
+      border: 1px solid transparent;
+    }
+    .nav-links a:hover{
+      color: var(--text);
+      background: rgba(255,255,255,.03);
+      border-color: rgba(255,255,255,.08);
+    }
+
+    .nav-actions{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 200px;
+      justify-content:flex-end;
+    }
+
+    .nav-toggle{
+      display:none;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      color: var(--text);
+      cursor:pointer;
+    }
+    .nav-toggle svg{ width: 20px; height: 20px; }
+
+    /* Mobile menu (collapsible) */
+    .mobile-panel{
+      display:none;
+      padding: 10px 0 16px;
+    }
+    .mobile-panel .panel{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      border-radius: var(--radius);
+      padding: 12px;
+    }
+    .mobile-panel .panel a{
+      display:block;
+      padding: 12px 10px;
+      border-radius: 14px;
+      color: var(--muted);
+      font-weight: 650;
+    }
+    .mobile-panel .panel a:hover{
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+    }
+    .mobile-panel .panel .panel-actions{
+      display:flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .mobile-panel.open{ display:block; }
+
+    /* =========================
+       Main + Footer
+       ========================= */
+    main{
+      padding: 28px 0 70px;
+      min-height: calc(100vh - 160px);
+    }
+
+    .footer{
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,.01);
+      padding: 28px 0;
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 18px;
+    }
+    .footer p, .footer a{
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .footer a:hover{ color: var(--text); }
+
+    .footer-title{
+      font-weight: 800;
+      color: var(--text);
+      margin: 0 0 8px;
+      letter-spacing: .2px;
+    }
+    .footer-note{
+      margin: 10px 0 0;
+      color: rgba(167,179,204,.9);
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 13px;
+      width: fit-content;
+    }
+    .dot{
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(109,94,252,.16);
+    }
+
+    /* Toast / flash messages */
+    .flash-wrap{
+      margin: 0 0 16px;
+    }
+    .flash{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius: 16px;
+      padding: 12px 14px;
+      color: var(--text);
+      box-shadow: var(--shadow);
+      margin: 10px 0;
+    }
+    .flash.success{ border-color: rgba(43,231,165,.35); }
+    .flash.error{ border-color: rgba(255,90,90,.35); }
+
+    /* =========================
+       Responsive
+       ========================= */
+    @media (max-width: 920px){
+      .nav-links{ display:none; }
+      .nav-toggle{ display:inline-flex; align-items:center; justify-content:center; }
+      .nav-actions .btn-ghost{ display:none; } /* keep only primary CTA in header */
+      .footer-grid{ grid-template-columns: 1fr; }
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; scroll-behavior:auto !important; }
+    }
+  </style>
+
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+  <!-- NAV -->
+  <header class="nav-wrap">
+    <div class="container">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="{{ url_for('views.home') if 'views.home' in (get_flashed_messages.__globals__.get('current_app').view_functions if get_flashed_messages.__globals__.get('current_app') else {}) else '/' }}">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>
+            {% block brand_name %}ClipzyStudio{% endblock %}
+            <small>{% block brand_tagline %}Social • Creative • Ads{% endblock %}</small>
+          </span>
+        </a>
+
+        <div class="nav-links" role="navigation" aria-label="Site">
+          <a href="#services">Services</a>
+          <a href="#work">Work</a>
+          <a href="#process">Process</a>
+          <a href="#contact">Contact</a>
+        </div>
+
+        <div class="nav-actions">
+          <a class="btn btn-ghost" href="#work">View Work</a>
+          <a class="btn btn-primary" href="#contact">Book a Call</a>
+          <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </nav>
+
+      <!-- MOBILE MENU -->
+      <div id="mobileMenu" class="mobile-panel" hidden>
+        <div class="panel">
+          <a href="#services">Services</a>
+          <a href="#work">Work</a>
+          <a href="#process">Process</a>
+          <a href="#contact">Contact</a>
+
+          <div class="panel-actions">
+            <a class="btn btn-ghost" style="flex:1" href="#work">View Work</a>
+            <a class="btn btn-primary" style="flex:1" href="#contact">Book a Call</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="container">
+
+      <!-- Optional: Flash messages (Flask) -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-wrap" aria-live="polite" aria-atomic="true">
+            {% for category, message in messages %}
+              <div class="flash {{ category|lower }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">{% block footer_brand %}Clipzy Studio{% endblock %}</div>
+          <div class="pill"><span class="dot"></span> Available for new projects</div>
+          <p class="footer-note">
+            Social Media Management • Reels Editing • Graphic Design • Ads
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-title">Quick Links</div>
+          <p><a href="#services">Services</a></p>
+          <p><a href="#work">Portfolio</a></p>
+          <p><a href="#process">Process</a></p>
+          <p><a href="#contact">Contact</a></p>
+        </div>
+
+        <div>
+          <div class="footer-title">Contact</div>
+          <p><a href="mailto:hello@clipzystudio.com">hello@clipzystudio.com</a></p>
+          <p><a href="tel:+10000000000">+1 (000) 000-0000</a></p>
+          <p><a href="#" rel="noopener">Instagram</a> · <a href="#" rel="noopener">TikTok</a></p>
+        </div>
+      </div>
+
+      <p style="margin:18px 0 0; color:rgba(167,179,204,.7); font-size:13px;">
+        © {{ (now().year if now is defined else 2026) }} {% block copyright_name %}Clipzy Studio{% endblock %}. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle (tiny + reliable)
+    (function () {
+      const btn = document.querySelector(".nav-toggle");
+      const menu = document.getElementById("mobileMenu");
+      if (!btn || !menu) return;
+
+      const setOpen = (open) => {
+        btn.setAttribute("aria-expanded", String(open));
+        menu.hidden = !open;
+        menu.classList.toggle("open", open);
+      };
+
+      btn.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        setOpen(!isOpen);
+      });
+
+      // Close menu when clicking a link
+      menu.addEventListener("click", (e) => {
+        const target = e.target;
+        if (target && target.tagName === "A") setOpen(false);
+      });
+    })();
+  </script>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

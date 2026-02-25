@@ -1,0 +1,1179 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* =========================
+     Home Page (Fancy Details)
+     ========================= */
+
+  /* Section spacing */
+  .section { padding: 54px 0; }
+  .section-tight { padding: 34px 0; }
+  .section-title {
+    font-size: clamp(24px, 2.4vw, 36px);
+    margin: 0 0 10px;
+    letter-spacing: -0.02em;
+  }
+  .section-sub {
+    margin: 0;
+    color: var(--muted);
+    max-width: 70ch;
+    font-size: 15px;
+  }
+
+  /* Subtle divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+    margin: 0;
+    border: 0;
+  }
+
+  /* =========================
+     Hero
+     ========================= */
+  .hero {
+    padding: 56px 0 28px;
+    position: relative;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 22px;
+    align-items: center;
+  }
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.02);
+    color: var(--muted);
+    font-weight: 650;
+    font-size: 13px;
+    width: fit-content;
+  }
+  .badge .spark{
+    width: 10px; height: 10px;
+    border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 0 5px rgba(109,94,252,.18);
+  }
+
+  .hero h1{
+    font-size: clamp(34px, 3.6vw, 56px);
+    line-height: 1.05;
+    margin: 14px 0 10px;
+    letter-spacing: -0.04em;
+  }
+  .hero p{
+    margin: 0 0 18px;
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 62ch;
+  }
+
+  .hero-actions{
+    display:flex;
+    gap: 12px;
+    flex-wrap:wrap;
+    margin-top: 12px;
+  }
+
+  .proof-row{
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .proof{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.02);
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .proof strong{ color: var(--text); }
+
+  /* Hero right: phone mock + cards */
+  .showcase{
+    position: relative;
+    border-radius: calc(var(--radius) + 6px);
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+    box-shadow: var(--shadow);
+    padding: 18px;
+    overflow: hidden;
+  }
+  .showcase::before{
+    content:"";
+    position:absolute;
+    inset:-80px -120px auto auto;
+    width: 240px;
+    height: 240px;
+    background: radial-gradient(circle at 30% 30%, rgba(109,94,252,.28), transparent 65%);
+    filter: blur(2px);
+    transform: rotate(18deg);
+  }
+  .showcase::after{
+    content:"";
+    position:absolute;
+    inset:auto auto -90px -120px;
+    width: 300px;
+    height: 260px;
+    background: radial-gradient(circle at 40% 40%, rgba(43,231,165,.18), transparent 65%);
+    filter: blur(2px);
+  }
+
+  .phone{
+    position: relative;
+    width: min(310px, 100%);
+    margin: 0 auto;
+    border-radius: 34px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(6,9,12,.70);
+    box-shadow: 0 18px 46px rgba(0,0,0,.55);
+    padding: 14px;
+    overflow: hidden;
+  }
+  .phone-top{
+    display:flex;
+    justify-content:center;
+    padding: 6px 0 10px;
+  }
+  .notch{
+    width: 90px;
+    height: 18px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .screen{
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: linear-gradient(145deg, rgba(109,94,252,.16), rgba(255,255,255,.02));
+    overflow: hidden;
+  }
+
+  /* Fake reel thumbnail */
+  .reel-thumb{
+    aspect-ratio: 9 / 16;
+    position: relative;
+    display:flex;
+    align-items:flex-end;
+    padding: 14px;
+    background:
+      radial-gradient(240px 180px at 20% 20%, rgba(255,255,255,.18), transparent 60%),
+      radial-gradient(260px 180px at 70% 30%, rgba(109,94,252,.26), transparent 60%),
+      radial-gradient(280px 220px at 40% 85%, rgba(43,231,165,.16), transparent 60%),
+      linear-gradient(180deg, rgba(8,10,12,.85), rgba(8,10,12,.95));
+  }
+  .reel-badge{
+    position:absolute;
+    top: 12px; left: 12px;
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.03);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 650;
+    backdrop-filter: blur(10px);
+  }
+  .play{
+    width: 28px; height: 28px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .play svg{ width: 14px; height: 14px; }
+
+  .reel-text{
+    width: 100%;
+    padding: 12px 12px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.03);
+    backdrop-filter: blur(12px);
+  }
+  .reel-text strong{
+    display:block;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+  .reel-text span{
+    display:block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .mini-stats{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .stat{
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.02);
+    padding: 10px 12px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .stat strong{
+    display:block;
+    color: var(--text);
+    font-size: 15px;
+    margin-bottom: 2px;
+    letter-spacing: -0.02em;
+  }
+
+  /* =========================
+     Logos / trust row
+     ========================= */
+  .trust{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 14px;
+    padding: 18px 0 0;
+    flex-wrap: wrap;
+  }
+  .trust p{
+    margin:0;
+    color: rgba(167,179,204,.85);
+    font-size: 13px;
+  }
+  .logo-row{
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .logo-pill{
+    padding: 10px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.02);
+    color: rgba(167,179,204,.95);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  /* =========================
+     Services
+     ========================= */
+  .grid-4{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+  }
+  .card{
+    border-radius: calc(var(--radius) + 2px);
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+    box-shadow: 0 10px 26px rgba(0,0,0,.35);
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .card:hover{
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,.14);
+    background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:-60px -90px auto auto;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle at 30% 30%, rgba(109,94,252,.18), transparent 65%);
+    transform: rotate(18deg);
+    pointer-events:none;
+  }
+  .icon{
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.03);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom: 12px;
+  }
+  .icon svg{ width: 18px; height: 18px; }
+  .card h3{
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+    font-size: 16px;
+  }
+  .card p{
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .list{
+    margin: 0;
+    padding-left: 16px;
+    color: rgba(167,179,204,.92);
+    font-size: 13px;
+  }
+  .list li{ margin: 6px 0; }
+
+  /* =========================
+     Portfolio
+     ========================= */
+  .filters{
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+  }
+  .chip{
+    padding: 10px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.02);
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 13px;
+    cursor:pointer;
+    transition: transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .chip:hover{
+    transform: translateY(-1px);
+    border-color: rgba(255,255,255,.14);
+    color: var(--text);
+    background: rgba(255,255,255,.03);
+  }
+  .chip.active{
+    color: var(--text);
+    border-color: rgba(109,94,252,.55);
+    background: rgba(109,94,252,.12);
+  }
+
+  .work-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .work-item{
+    position: relative;
+    border-radius: calc(var(--radius) + 2px);
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.02);
+    overflow: hidden;
+    cursor:pointer;
+    transition: transform .15s ease, border-color .15s ease;
+    min-height: 220px;
+  }
+  .work-item:hover{
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,.14);
+  }
+
+  .thumb{
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:flex-end;
+    padding: 14px;
+    background:
+      radial-gradient(220px 140px at 20% 20%, rgba(255,255,255,.12), transparent 60%),
+      radial-gradient(260px 180px at 70% 35%, rgba(109,94,252,.22), transparent 60%),
+      linear-gradient(180deg, rgba(6,9,12,.65), rgba(6,9,12,.95));
+  }
+  .thumb.poster{
+    background:
+      radial-gradient(240px 180px at 20% 15%, rgba(255,255,255,.14), transparent 60%),
+      radial-gradient(260px 180px at 65% 30%, rgba(43,231,165,.14), transparent 60%),
+      linear-gradient(180deg, rgba(6,9,12,.62), rgba(6,9,12,.95));
+  }
+  .thumb.reel{
+    background:
+      radial-gradient(240px 180px at 20% 15%, rgba(255,255,255,.14), transparent 60%),
+      radial-gradient(260px 180px at 65% 30%, rgba(109,94,252,.25), transparent 60%),
+      radial-gradient(260px 200px at 30% 90%, rgba(43,231,165,.14), transparent 60%),
+      linear-gradient(180deg, rgba(6,9,12,.62), rgba(6,9,12,.95));
+  }
+
+  .work-meta{
+    width:100%;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.03);
+    backdrop-filter: blur(12px);
+    padding: 10px 12px;
+  }
+  .work-meta strong{
+    display:block;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+  .work-meta span{
+    display:block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .tag{
+    position:absolute;
+    top: 12px; left: 12px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.03);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    backdrop-filter: blur(12px);
+  }
+
+  /* Modal */
+  .modal{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.60);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding: 22px;
+    z-index: 80;
+  }
+  .modal.open{ display:flex; }
+  .modal-card{
+    width: min(860px, 100%);
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(11,15,20,.92);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 22px 70px rgba(0,0,0,.65);
+    overflow:hidden;
+  }
+  .modal-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255,255,255,.10);
+  }
+  .modal-top strong{ font-size: 14px; }
+  .close{
+    width: 44px; height: 44px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.02);
+    color: var(--text);
+    cursor:pointer;
+  }
+  .modal-body{
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 0;
+  }
+  .modal-preview{
+    min-height: 320px;
+    background:
+      radial-gradient(260px 200px at 25% 25%, rgba(109,94,252,.22), transparent 65%),
+      radial-gradient(280px 220px at 70% 60%, rgba(43,231,165,.14), transparent 65%),
+      linear-gradient(180deg, rgba(6,9,12,.35), rgba(6,9,12,.92));
+    border-right: 1px solid rgba(255,255,255,.10);
+    padding: 18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .preview-box{
+    width: min(320px, 100%);
+    aspect-ratio: 4 / 5;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.03);
+    box-shadow: 0 18px 52px rgba(0,0,0,.55);
+    position: relative;
+    overflow:hidden;
+    padding: 16px;
+    display:flex;
+    align-items:flex-end;
+  }
+  .preview-box.reel{ aspect-ratio: 9 / 16; border-radius: 26px; }
+  .modal-info{
+    padding: 18px;
+  }
+  .modal-info h4{
+    margin: 0 0 6px;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+  }
+  .modal-info p{
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .meta-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .meta-pill{
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.02);
+    padding: 10px 12px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .meta-pill strong{
+    display:block;
+    color: var(--text);
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+
+  /* =========================
+     Process
+     ========================= */
+  .steps{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .step{
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.02);
+    padding: 14px;
+  }
+  .step .num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width: 34px; height: 34px;
+    border-radius: 14px;
+    border: 1px solid rgba(109,94,252,.45);
+    background: rgba(109,94,252,.10);
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+  .step h4{
+    margin: 0 0 6px;
+    font-size: 15px;
+    letter-spacing: -0.02em;
+  }
+  .step p{
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* =========================
+     Contact
+     ========================= */
+  .contact-grid{
+    display:grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap: 14px;
+    margin-top: 18px;
+  }
+  .panel{
+    border-radius: 22px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.02);
+    padding: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.35);
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap: 7px;
+    margin-bottom: 12px;
+  }
+  label{
+    color: rgba(167,179,204,.9);
+    font-size: 13px;
+    font-weight: 650;
+  }
+  input, select, textarea{
+    width: 100%;
+    padding: 12px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.02);
+    color: var(--text);
+    outline: none;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  textarea{ min-height: 120px; resize: vertical; }
+  input::placeholder, textarea::placeholder{ color: rgba(167,179,204,.55); }
+  input:focus, select:focus, textarea:focus{
+    border-color: rgba(109,94,252,.65);
+    background: rgba(255,255,255,.03);
+  }
+
+  .contact-side{
+    display:flex;
+    flex-direction:column;
+    gap: 12px;
+  }
+  .cta-box{
+    border-radius: 22px;
+    border: 1px solid rgba(109,94,252,.30);
+    background: radial-gradient(380px 200px at 20% 20%, rgba(109,94,252,.20), transparent 60%),
+                linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+    padding: 16px;
+  }
+  .cta-box h4{
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+  }
+  .cta-box p{
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  /* =========================
+     Responsive
+     ========================= */
+  @media (max-width: 980px){
+    .hero-grid{ grid-template-columns: 1fr; }
+    .showcase{ order: -1; }
+    .grid-4{ grid-template-columns: 1fr 1fr; }
+    .work-grid{ grid-template-columns: 1fr 1fr; }
+    .steps{ grid-template-columns: 1fr 1fr; }
+    .contact-grid{ grid-template-columns: 1fr; }
+    .modal-body{ grid-template-columns: 1fr; }
+    .modal-preview{ border-right: 0; border-bottom: 1px solid rgba(255,255,255,.10); }
+  }
+  @media (max-width: 520px){
+    .grid-4{ grid-template-columns: 1fr; }
+    .work-grid{ grid-template-columns: 1fr; }
+    .steps{ grid-template-columns: 1fr; }
+    .hero{ padding-top: 36px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-grid">
+    <div>
+      <div class="badge">
+        <span class="spark"></span>
+        Premium Social Media Agency
+      </div>
+
+      <h1>Scroll-stopping content.<br/>Real growth.</h1>
+
+      <p>
+        We help brands win on Instagram & TikTok with <strong>Social Media Management</strong>,
+        <strong>Reels Editing</strong>, <strong>Graphic Design</strong>, and <strong>Ads</strong> —
+        designed to turn attention into leads and sales.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#contact">Get a Free Audit</a>
+        <a class="btn btn-ghost" href="#work">View Portfolio</a>
+      </div>
+
+      <div class="proof-row">
+        <div class="proof"><strong>48–72h</strong> Turnaround</div>
+        <div class="proof"><strong>Strategy</strong> + Creative</div>
+        <div class="proof"><strong>Monthly</strong> Reporting</div>
+      </div>
+
+      <div class="trust">
+        <p>Designed for modern brands & local businesses.</p>
+        <div class="logo-row" aria-label="Client logos">
+          <span class="logo-pill">Brand</span>
+          <span class="logo-pill">Studio</span>
+          <span class="logo-pill">Shop</span>
+          <span class="logo-pill">Cafe</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="showcase" aria-label="Showcase">
+      <div class="phone" aria-label="Phone mockup">
+        <div class="phone-top"><div class="notch" aria-hidden="true"></div></div>
+
+        <div class="screen">
+          <div class="reel-thumb">
+            <div class="reel-badge">
+              <span class="play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M10 8l6 4-6 4V8z" fill="currentColor"/>
+                </svg>
+              </span>
+              Reel Edit Preview
+            </div>
+
+            <div class="reel-text">
+              <strong>Hook • Captions • Speed • Style</strong>
+              <span>Designed to keep viewers watching.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-stats">
+          <div class="stat"><strong>+2.4M</strong> Views generated</div>
+          <div class="stat"><strong>3.1%</strong> Avg CTR on ads</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <h2 class="section-title">Services that move the needle</h2>
+  <p class="section-sub">
+    Everything you need to grow — from content planning to performance creative and ads.
+  </p>
+
+  <div class="grid-4">
+    <article class="card">
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M6 4h12v16H6V4z" stroke="currentColor" stroke-width="2" opacity=".9"/>
+          <path d="M8 8h8M8 12h8M8 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h3>Social Media Management</h3>
+      <p>We plan, post, and manage your brand consistently.</p>
+      <ul class="list">
+        <li>Content calendar + posting</li>
+        <li>Captions + hashtags</li>
+        <li>Community management</li>
+        <li>Monthly reporting</li>
+      </ul>
+    </article>
+
+    <article class="card">
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M8 5h8a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3z" stroke="currentColor" stroke-width="2"/>
+          <path d="M11 10l4 2-4 2v-4z" fill="currentColor" opacity=".95"/>
+        </svg>
+      </div>
+      <h3>Reels Editing</h3>
+      <p>Fast-paced edits that keep attention and boost watch time.</p>
+      <ul class="list">
+        <li>Hook pacing + captions</li>
+        <li>Sound + trend alignment</li>
+        <li>9:16 exports + thumbnails</li>
+        <li>48–72h turnaround</li>
+      </ul>
+    </article>
+
+    <article class="card">
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 16l8-8 4 4-8 8H4v-4z" stroke="currentColor" stroke-width="2"/>
+          <path d="M13 7l2-2 4 4-2 2-4-4z" fill="currentColor" opacity=".9"/>
+        </svg>
+      </div>
+      <h3>Graphic Design</h3>
+      <p>Clean, branded designs that look premium on social.</p>
+      <ul class="list">
+        <li>Posters + carousels</li>
+        <li>Brand templates</li>
+        <li>Promo + story assets</li>
+        <li>Consistent style system</li>
+      </ul>
+    </article>
+
+    <article class="card">
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 12a8 8 0 1 0 16 0A8 8 0 0 0 4 12z" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 12l6-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 12l-3 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".85"/>
+        </svg>
+      </div>
+      <h3>Ads</h3>
+      <p>Performance creatives + campaigns built to convert.</p>
+      <ul class="list">
+        <li>Meta/TikTok campaigns</li>
+        <li>Creative + copy</li>
+        <li>Weekly optimization</li>
+        <li>Reporting + tracking</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- PORTFOLIO -->
+<section class="section" id="work">
+  <h2 class="section-title">Portfolio</h2>
+  <p class="section-sub">
+    Posters, reel thumbnails, and social creatives — click any card to preview.
+  </p>
+
+  <div class="filters" role="tablist" aria-label="Portfolio filters">
+    <button class="chip active" data-filter="all" type="button">All</button>
+    <button class="chip" data-filter="poster" type="button">Posters</button>
+    <button class="chip" data-filter="thumbnail" type="button">Thumbnails</button>
+    <button class="chip" data-filter="reel" type="button">Reels</button>
+    <button class="chip" data-filter="ad" type="button">Ads</button>
+  </div>
+
+  <!-- Demo tiles (replace with your images later) -->
+  <div class="work-grid" aria-label="Work grid">
+    <div class="work-item" data-type="poster" data-title="Promo Poster Design" data-desc="Poster designed for an in-store promo with brand styling + strong CTA.">
+      <span class="tag">Poster</span>
+      <div class="thumb poster">
+        <div class="work-meta">
+          <strong>Promo Poster Design</strong>
+          <span>Bold layout • Clear CTA • Brand colors</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item" data-type="reel" data-title="Reel Edit (Hook + Captions)" data-desc="Fast-paced reel edit with captions, pacing, and hook optimization.">
+      <span class="tag">Reel</span>
+      <div class="thumb reel">
+        <div class="work-meta">
+          <strong>Reel Edit (Hook + Captions)</strong>
+          <span>Captions • Pacing • Sound alignment</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item" data-type="thumbnail" data-title="Reel Thumbnail Set" data-desc="Thumbnail variations designed to improve click-through rate and brand consistency.">
+      <span class="tag">Thumbnail</span>
+      <div class="thumb">
+        <div class="work-meta">
+          <strong>Reel Thumbnail Set</strong>
+          <span>High contrast • Consistent style</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item" data-type="ad" data-title="Ad Creative Pack" data-desc="Ad creatives built for A/B testing: headlines, visuals, and CTA variations.">
+      <span class="tag">Ads</span>
+      <div class="thumb">
+        <div class="work-meta">
+          <strong>Ad Creative Pack</strong>
+          <span>A/B testing • Direct response</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item" data-type="poster" data-title="Event Poster" data-desc="Event poster with hierarchy, clean typography, and social-ready sizing.">
+      <span class="tag">Poster</span>
+      <div class="thumb poster">
+        <div class="work-meta">
+          <strong>Event Poster</strong>
+          <span>4:5 social format • Clean type</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item" data-type="reel" data-title="Reel Edit (Product)" data-desc="Reel optimized for product showcase with speed ramps and crisp captions.">
+      <span class="tag">Reel</span>
+      <div class="thumb reel">
+        <div class="work-meta">
+          <strong>Reel Edit (Product)</strong>
+          <span>Speed ramps • Captions • Punchy cut</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- PROCESS -->
+<section class="section" id="process">
+  <h2 class="section-title">Our process</h2>
+  <p class="section-sub">
+    Simple, fast, and built around performance.
+  </p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="num">1</div>
+      <h4>Audit</h4>
+      <p>We review your socials, competitors, and offer.</p>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <h4>Strategy</h4>
+      <p>Content plan + creative direction that fits your brand.</p>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <h4>Create</h4>
+      <p>Reels, posters, thumbnails, and ad creatives delivered weekly.</p>
+    </div>
+    <div class="step">
+      <div class="num">4</div>
+      <h4>Scale</h4>
+      <p>Optimize, track results, and double down on what works.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <h2 class="section-title">Let’s grow your brand</h2>
+  <p class="section-sub">
+    Tell us about your business. We’ll reply with next steps (and a free audit if you want).
+  </p>
+
+  <div class="contact-grid">
+    <div class="panel">
+  <form method="POST" action="{{ url_for('views.free_audit') }}">
+    
+    <div class="field">
+      <label for="name">Name *</label>
+      <input id="name" name="name" placeholder="Your name" required />
+    </div>
+
+    <div class="field">
+      <label for="email">Email *</label>
+      <input id="email" name="email" type="email" placeholder="you@email.com" required />
+    </div>
+
+    <div class="field">
+      <label for="phone">Phone (Optional)</label>
+      <input id="phone" name="phone" placeholder="+1 000 000 0000" />
+    </div>
+
+    <div class="field">
+      <label for="brand">Business / Brand Name</label>
+      <input id="brand" name="brand" placeholder="Your brand name" />
+    </div>
+
+    <div class="field">
+      <label for="ig_handle">Instagram / TikTok Handle</label>
+      <input id="ig_handle" name="ig_handle" placeholder="@yourbrand" />
+    </div>
+
+    <div class="field">
+      <label for="website">Website (Optional)</label>
+      <input id="website" name="website" placeholder="https://yourwebsite.com" />
+    </div>
+
+    <div class="field">
+      <label for="services">What do you need?</label>
+      <select id="services" name="services">
+        <option value="Social Media Management">Social Media Management</option>
+        <option value="Reels Editing">Reels Editing</option>
+        <option value="Graphic Design">Graphic Design</option>
+        <option value="Ads">Ads</option>
+        <option value="Everything">Everything</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="budget">Budget (Optional)</label>
+      <select id="budget" name="budget">
+        <option value="">Select budget</option>
+        <option value="$300-$800">$300-$800</option>
+        <option value="$800-$2000">$800-$2000</option>
+        <option value="$2000+">$2000+</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="goals">Goals / Details</label>
+      <textarea id="goals" name="goals" placeholder="What are you trying to achieve in the next 30-90 days?"></textarea>
+    </div>
+
+    <button class="btn btn-primary" type="submit">
+      Get Free Audit
+    </button>
+
+  </form>
+</div>
+    <div class="contact-side">
+      <div class="cta-box">
+        <h4>Free Audit (Optional)</h4>
+        <p>
+          Want quick wins? We’ll send 5 actionable improvements for your content + profile.
+        </p>
+        <a class="btn btn-ghost" href="#work">See Portfolio</a>
+      </div>
+
+      <div class="panel">
+        <div class="meta-grid">
+          <div class="meta-pill">
+            <strong>Response time</strong>
+            Within 24 hours
+          </div>
+          <div class="meta-pill">
+            <strong>Turnaround</strong>
+            48–72 hours
+          </div>
+          <div class="meta-pill">
+            <strong>Deliverables</strong>
+            Weekly batches
+          </div>
+          <div class="meta-pill">
+            <strong>Reporting</strong>
+            Monthly
+          </div>
+        </div>
+
+        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn btn-ghost" href="mailto:hello@clipzystudio.com">Email</a>
+          <a class="btn btn-ghost" href="#" rel="noopener">Instagram</a>
+          <a class="btn btn-primary" href="#contact">Book a Call</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL (Portfolio Preview) -->
+<div class="modal" id="workModal" aria-hidden="true" role="dialog" aria-label="Work preview">
+  <div class="modal-card" role="document">
+    <div class="modal-top">
+      <strong id="modalTitle">Preview</strong>
+      <button class="close" type="button" aria-label="Close preview">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-preview">
+        <div class="preview-box" id="modalBox">
+          <div class="work-meta" style="width:100%;">
+            <strong id="modalMiniTitle">Project</strong>
+            <span id="modalMiniSub">Type</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-info">
+        <h4 id="modalHeading">Project Title</h4>
+        <p id="modalDesc">Project description.</p>
+
+        <div class="meta-grid">
+          <div class="meta-pill"><strong>Category</strong><span id="modalCat">—</span></div>
+          <div class="meta-pill"><strong>Deliverable</strong>Poster / Reel / Ad</div>
+          <div class="meta-pill"><strong>Format</strong>IG • TikTok • Meta</div>
+          <div class="meta-pill"><strong>Goal</strong>Clicks • Leads • Sales</div>
+        </div>
+
+        <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn btn-primary" href="#contact">Request Similar Work</a>
+          <button class="btn btn-ghost close" type="button">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // =========================
+  // Portfolio Filter + Modal
+  // =========================
+  (function(){
+    const chips = Array.from(document.querySelectorAll(".chip"));
+    const items = Array.from(document.querySelectorAll(".work-item"));
+
+    const modal = document.getElementById("workModal");
+    const closeBtns = Array.from(modal.querySelectorAll(".close"));
+
+    const modalTitle = document.getElementById("modalTitle");
+    const modalHeading = document.getElementById("modalHeading");
+    const modalDesc = document.getElementById("modalDesc");
+    const modalCat = document.getElementById("modalCat");
+    const modalBox = document.getElementById("modalBox");
+    const modalMiniTitle = document.getElementById("modalMiniTitle");
+    const modalMiniSub = document.getElementById("modalMiniSub");
+
+    function setActiveChip(active){
+      chips.forEach(c => c.classList.toggle("active", c === active));
+    }
+
+    function filter(type){
+      items.forEach(item => {
+        const ok = (type === "all") || (item.dataset.type === type);
+        item.style.display = ok ? "" : "none";
+      });
+    }
+
+    chips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        setActiveChip(chip);
+        filter(chip.dataset.filter);
+      });
+    });
+
+    function openModal(item){
+      const title = item.dataset.title || "Preview";
+      const desc = item.dataset.desc || "";
+      const cat = item.dataset.type || "work";
+
+      modalTitle.textContent = title;
+      modalHeading.textContent = title;
+      modalDesc.textContent = desc;
+      modalCat.textContent = cat.toUpperCase();
+
+      modalMiniTitle.textContent = title;
+      modalMiniSub.textContent = cat.toUpperCase();
+
+      // switch preview box ratio
+      modalBox.classList.toggle("reel", cat === "reel");
+
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(){
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    items.forEach(item => item.addEventListener("click", () => openModal(item)));
+    closeBtns.forEach(btn => btn.addEventListener("click", closeModal));
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
+    });
+  })();
+</script>
+
+{% endblock %}
